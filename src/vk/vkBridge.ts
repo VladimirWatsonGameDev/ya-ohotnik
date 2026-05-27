@@ -16,7 +16,6 @@ export type VkRuntime = {
 };
 
 const storagePrefix = "ya_ohotnik_";
-const vkAppId = Number(import.meta.env.VITE_VK_APP_ID ?? 0);
 
 export async function initVkBridge(): Promise<VkRuntime> {
   try {
@@ -65,22 +64,8 @@ async function setStorage<T>(key: string, value: T): Promise<void> {
 }
 
 async function buyCoins(packId: string): Promise<boolean> {
-  if (!vkAppId) {
-    return false;
-  }
-
-  try {
-    await bridge.send("VKWebAppOpenPayForm", {
-      app_id: vkAppId,
-      action: "pay-to-service",
-      params: {
-        item: packId
-      }
-    });
-    return true;
-  } catch {
-    return false;
-  }
+  console.info(`Payments are disabled in free demo mode: ${packId}`);
+  return false;
 }
 
 async function getLocalStorage<T>(key: string, fallback: T): Promise<T> {
